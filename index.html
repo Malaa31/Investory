@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Patrimoine Pilot — Dashboard personnel</title>
+  <meta name="description" content="Suivi local de patrimoine, objectifs, projections et alertes." />
+  <meta name="theme-color" content="#0F172A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://unpkg.com" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigation principale">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <strong>Patrimoine Pilot</strong>
+          <span>Monitoring personnel</span>
+        </div>
+      </div>
+      <nav class="nav-list" id="navList">
+        <button class="nav-item active" data-page="dashboard"><i data-lucide="layout-dashboard"></i><span>Vue d'ensemble</span></button>
+        <button class="nav-item" data-page="assets"><i data-lucide="wallet"></i><span>Patrimoine détaillé</span></button>
+        <button class="nav-item" data-page="performance"><i data-lucide="line-chart"></i><span>Performance</span></button>
+        <button class="nav-item" data-page="goals"><i data-lucide="target"></i><span>Objectifs & versements</span></button>
+        <button class="nav-item" data-page="checklist"><i data-lucide="calendar-check"></i><span>Checklist actions</span></button>
+        <button class="nav-item" data-page="projections"><i data-lucide="trending-up"></i><span>Projections</span></button>
+        <button class="nav-item" data-page="settings"><i data-lucide="settings"></i><span>Paramètres</span></button>
+      </nav>
+      <div class="sidebar-footer">
+        <span>Données locales</span>
+        <strong id="storageStatus">localStorage actif</strong>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Stratégie patrimoniale</p>
+          <h1 id="pageTitle">Vue d'ensemble</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost-btn" id="saveSnapshotBtn"><i data-lucide="save"></i>Snapshot mensuel</button>
+          <button class="primary-btn" data-page-jump="settings"><i data-lucide="download"></i>Backup</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="grid kpi-grid">
+          <article class="card kpi"><span>Patrimoine net</span><strong id="netWorthKpi">—</strong><small id="netWorthDelta">—</small></article>
+          <article class="card kpi"><span>Total actifs</span><strong id="totalAssetsKpi">—</strong><small>Liquidités + immobilier</small></article>
+          <article class="card kpi debt"><span>Total dettes</span><strong id="totalDebtKpi">—</strong><small>Crédit + PTZ</small></article>
+          <article class="card kpi"><span>Épargne du mois</span><strong id="savingsKpi">—</strong><small>Objectif mensuel</small></article>
+        </div>
+        <div class="grid two-columns">
+          <article class="card chart-card"><div class="card-head"><h2>Allocation actuelle</h2><span class="pill">vs cible</span></div><canvas id="allocationChart"></canvas></article>
+          <article class="card"><div class="card-head"><h2>Alertes intelligentes</h2><span class="pill" id="alertCount">—</span></div><div id="alertsList" class="alerts-list"></div></article>
+        </div>
+        <div class="grid two-columns">
+          <article class="card chart-card"><div class="card-head"><h2>Évolution 12 mois</h2><span class="pill">mini chart</span></div><canvas id="netWorthMiniChart"></canvas></article>
+          <article class="card chart-card"><div class="card-head"><h2>Versements mensuels</h2><span class="pill">objectif</span></div><canvas id="monthlyContribChart"></canvas></article>
+        </div>
+      </section>
+
+      <section class="page" id="page-assets">
+        <article class="card"><div class="card-head"><h2>Enveloppes patrimoniales</h2><button class="ghost-btn" id="monthlyUpdateBtn"><i data-lucide="refresh-cw"></i>Mise à jour mensuelle</button></div><div class="table-wrap"><table><thead><tr><th>Enveloppe</th><th>Ouverture</th><th>Solde</th><th>Allocation interne</th><th>% patrimoine</th><th>YTD</th><th>Fiscalité</th><th>Historique</th></tr></thead><tbody id="assetsTable"></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="page-performance">
+        <div class="grid metric-grid"><article class="card kpi"><span>TRI estimé</span><strong id="irrMetric">—</strong><small>approximation annuelle</small></article><article class="card kpi"><span>YTD global</span><strong id="ytdMetric">—</strong><small>pondéré</small></article><article class="card kpi debt"><span>Drawdown max</span><strong id="drawdownMetric">—</strong><small>historique simulé</small></article></div>
+        <div class="grid two-columns"><article class="card chart-card"><h2>Patrimoine net</h2><canvas id="wealthChart"></canvas></article><article class="card chart-card"><h2>Par enveloppe</h2><canvas id="envelopeChart"></canvas></article></div>
+        <div class="grid two-columns"><article class="card chart-card"><h2>Allocation dans le temps</h2><canvas id="allocationTimeChart"></canvas></article><article class="card chart-card"><h2>Vs MSCI World</h2><canvas id="benchmarkChart"></canvas></article></div>
+      </section>
+
+      <section class="page" id="page-goals">
+        <div class="grid two-columns"><article class="card"><h2>Versements objectif vs réel</h2><div id="goalsList" class="goal-list"></div></article><article class="card"><h2>Plafonds & fiscalité</h2><div id="ceilingsList" class="goal-list"></div></article></div>
+        <article class="card chart-card"><div class="card-head"><h2>Redéploiement Livret A</h2><span class="pill">12 700 € / 12 mois</span></div><canvas id="livretRedeployChart"></canvas></article>
+      </section>
+
+      <section class="page" id="page-checklist">
+        <article class="card"><div class="card-head"><h2>Avancement global</h2><strong id="checklistProgress">0 %</strong></div><div class="progress"><span id="checklistProgressBar"></span></div></article>
+        <div id="checklistGroups" class="checklist-grid"></div>
+      </section>
+
+      <section class="page" id="page-projections">
+        <div class="grid two-columns"><article class="card"><h2>Hypothèses</h2><div id="projectionControls" class="controls"></div></article><article class="card"><h2>Résultats</h2><div class="projection-results"><div><span>Date d'atteinte du million</span><strong id="millionDate">—</strong></div><div><span>Capital projeté</span><strong id="projectedCapital">—</strong></div><div><span>Rente annuelle 4 %</span><strong id="retirementIncome">—</strong></div><div><span>Économies fiscales cumulées</span><strong id="taxSavingsProjected">—</strong></div></div></article></div>
+        <article class="card chart-card"><h2>Courbe de croissance</h2><canvas id="projectionChart"></canvas></article>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="grid two-columns"><article class="card"><h2>Profil</h2><form id="profileForm" class="form-grid"></form></article><article class="card"><h2>Objectifs mensuels</h2><form id="targetsForm" class="form-grid"></form></article></div>
+        <article class="card"><h2>Backup local</h2><div class="backup-actions"><button class="primary-btn" id="exportBtn"><i data-lucide="download"></i>Exporter JSON</button><label class="ghost-btn file-label"><i data-lucide="upload"></i>Importer JSON<input type="file" id="importInput" accept="application/json" hidden></label><button class="danger-btn" id="resetBtn"><i data-lucide="trash-2"></i>Reset</button><button class="ghost-btn" id="themeBtn"><i data-lucide="moon"></i>Mode sombre/clair</button></div><p class="muted">Les données restent dans le navigateur. Le fichier JSON sert de sauvegarde manuelle.</p></article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
