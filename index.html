@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090A10" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Patrimoine" />
+  <title>Patrimoine Pilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <main id="screen" class="screen"></main>
+    <nav class="bottom-nav" aria-label="Navigation principale">
+      <button class="nav-btn active" data-tab="dashboard" aria-label="Accueil"><span class="nav-ico"><i data-lucide="home"></i></span><span class="nav-label">Accueil</span></button>
+      <button class="nav-btn" data-tab="assets" aria-label="Actifs"><span class="nav-ico"><i data-lucide="wallet"></i></span><span class="nav-label">Actifs</span></button>
+      <button class="nav-btn" data-tab="plan" aria-label="Plan"><span class="nav-ico"><i data-lucide="target"></i></span><span class="nav-label">Plan</span><span id="planBadge" class="nav-badge">0</span></button>
+      <button class="nav-btn" data-tab="actions" aria-label="Actions"><span class="nav-ico"><i data-lucide="bell"></i></span><span class="nav-label">Actions</span><span id="alertBadge" class="nav-badge">0</span></button>
+      <button class="nav-btn" data-tab="profile" aria-label="Profil"><span class="nav-ico"><i data-lucide="user"></i></span><span class="nav-label">Profil</span></button>
+    </nav>
+  </div>
+  <div id="toast" class="toast"></div>
+</body>
+</html>
